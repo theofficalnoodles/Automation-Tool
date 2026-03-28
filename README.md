@@ -1,4 +1,4 @@
-# Automation Tool 🤖
+# Automation Tool
 
 A powerful, universal automation tool for **any task**. Includes **auto clicker** and **key spam** functionality with an easy-to-use UI. Perfect for games, apps, workflows, and more!
 
