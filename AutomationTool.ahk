@@ -2,12 +2,13 @@
 #SingleInstance Force
 
 ; ============================================
-; AUTOMATION TOOL - PROFESSIONAL VERSION
+; AUTOMATION TOOL - FEATURE-RICH VERSION
 ; ============================================
 
 keySpamRunning := false
 autoClickerRunning := false
 keySequenceRunning := false
+keySequencePaused := false
 
 selectedKey1 := "z"
 selectedKey2 := ""
@@ -18,6 +19,7 @@ clickerDelay := 50
 clickerButton := "Left"
 
 currentProfile := ""
+loopCount := 0
 
 keySeqKeys := []
 keySeqDelays := []
@@ -40,53 +42,57 @@ Gui, Font, cFFFFFF s9, Segoe UI
 Gui, Add, Text, x10 y10 w800 h25 cFFAA00, AUTOMATION TOOL
 Gui, Add, Text, x10 y35 w800 h15 c999999, Universal Macro for Any Task
 
-Gui, Add, GroupBox, x10 y55 w800 h80 cFFFFFF, PROFILES & CONFIGS
+Gui, Add, Text, x10 y52 w400 h15 cGreen vActiveMacro, [IDLE] No macro running
 
-Gui, Add, Text, x20 y75 w140 cFFFFFF, Select Saved Config:
-Gui, Add, DropDownList, x170 y70 w200 h30 vProfileList
+Gui, Add, GroupBox, x10 y70 w800 h75 cFFFFFF, PROFILES & CONFIGS
+
+Gui, Add, Text, x20 y88 w130 cFFFFFF, Select Saved Config:
+Gui, Add, DropDownList, x160 y83 w200 h30 vProfileList
 RefreshProfileList()
 
-Gui, Add, Button, x385 y70 w55 h30 gLoadProfile cGreen, Load
-Gui, Add, Button, x450 y70 w55 h30 gDeleteProfile cRED, Delete
-Gui, Add, Button, x515 y70 w55 h30 gRefreshProfiles cBlue, Refresh
+Gui, Add, Button, x375 y83 w55 h30 gLoadProfile cGreen, Load
+Gui, Add, Button, x440 y83 w55 h30 gDeleteProfile cRED, Delete
+Gui, Add, Button, x505 y83 w55 h30 gRefreshProfiles cBlue, Refresh
 
-Gui, Add, Text, x20 y110 w140 cFFFFFF, Create New Config:
-Gui, Add, Edit, x170 y105 w200 h25 c000000 vNewProfileName,
-Gui, Add, Button, x385 y105 w90 h25 gCreateProfile cFFAA00, Save New
-Gui, Add, Button, x485 y105 w100 h25 gUpdateProfile cFFFF00, Update Current
+Gui, Add, Text, x20 y120 w130 cFFFFFF, Create New Config:
+Gui, Add, Edit, x160 y115 w200 h25 c000000 vNewProfileName,
+Gui, Add, Button, x375 y115 w85 h25 gCreateProfile cFFAA00, Save New
+Gui, Add, Button, x470 y115 w95 h25 gUpdateProfile cFFFF00, Update Curr
 
 ; ============================================
 ; TABS
 ; ============================================
-Gui, Add, Tab3, x10 y145 w810 h470 vMainTab, Key Spam|Auto Clicker|Seq (1-5)|Seq (6-10)|Settings
+Gui, Add, Tab3, x10 y155 w800 h470 vMainTab, Key Spam|Auto Clicker|Seq (1-5)|Seq (6-10)|Settings
 
 ; ============================================
 ; TAB 1: KEY SPAM
 ; ============================================
 
-Gui, Add, GroupBox, x20 y175 w790 h150 cFFFFFF, KEY SPAM SETTINGS
+Gui, Add, GroupBox, x20 y185 w780 h140 cFFFFFF, KEY SPAM SETTINGS
 
-Gui, Add, Text, x30 y195 w200 cFFFFFF, Key 1 (Required):
-Gui, Add, Edit, x250 y190 w150 h25 c000000 vKeyInput1, z
+Gui, Add, Text, x30 y205 w150 cFFFFFF, Key 1:
+Gui, Add, Edit, x190 y200 w100 h25 c000000 vKeyInput1, z
 
-Gui, Add, Text, x30 y230 w200 cFFFFFF, Key 2 (Optional):
-Gui, Add, Edit, x250 y225 w150 h25 c000000 vKeyInput2,
+Gui, Add, Text, x30 y240 w150 cFFFFFF, Key 2 (optional):
+Gui, Add, Edit, x190 y235 w100 h25 c000000 vKeyInput2,
 
-Gui, Add, Text, x450 y195 w200 cFFFFFF, Key 1 Delay (ms):
-Gui, Add, Edit, x700 y190 w80 h25 c000000 vKeyDelay1Input, 50
+Gui, Add, Text, x320 y205 w150 cFFFFFF, Delay 1 (ms):
+Gui, Add, Edit, x480 y200 w80 h25 c000000 vKeyDelay1Input, 50
 
-Gui, Add, Text, x450 y230 w200 cFFFFFF, Key 2 Delay (ms):
-Gui, Add, Edit, x700 y225 w80 h25 c000000 vKeyDelay2Input, 50
+Gui, Add, Text, x320 y240 w150 cFFFFFF, Delay 2 (ms):
+Gui, Add, Edit, x480 y235 w80 h25 c000000 vKeyDelay2Input, 50
 
-Gui, Add, Button, x30 y265 w180 h30 gSetKeysAndDelays cFFAA00, Set Keys & Delays
-Gui, Add, Text, x230 y270 w350 h20 vKeySpamStatus cGreen, Status: STOPPED
+Gui, Add, Button, x30 y270 w160 h30 gSetKeysAndDelays cFFAA00, Set Keys & Delays
+Gui, Add, Text, x210 y275 w280 h20 vKeySpamStatus cGreen, Status: STOPPED
 
-Gui, Add, GroupBox, x20 y355 w790 h125 cFFFFFF, INFO
+Gui, Add, GroupBox, x20 y340 w780 h130 cFFFFFF, SPEED PRESETS
 
-Gui, Add, Text, x30 y375 w700 cYellow, F7 = START | F8 = STOP
-Gui, Add, Text, x30 y400 w700 cYellow, Press Key 1 and Key 2 (if set) repeatedly with delays
-Gui, Add, Text, x30 y425 w700 cYellow, Perfect for games needing combo inputs or rapid presses
-Gui, Add, Text, x30 y450 w700 vCurrentProfileKeySpam cFFAA00, Current Profile: None
+Gui, Add, Button, x30 y360 w100 h30 gKeySpamSlow cGreen, SLOW (200ms)
+Gui, Add, Button, x145 y360 w100 h30 gKeySpamNormal cBlue, NORMAL (50ms)
+Gui, Add, Button, x260 y360 w100 h30 gKeySpamFast cRED, FAST (10ms)
+
+Gui, Add, Text, x30 y400 w420 cYellow, F7 = START | F8 = STOP
+Gui, Add, Text, x30 y425 w420 cYellow, Perfect for combo inputs and rapid key presses
 
 ; ============================================
 ; TAB 2: AUTO CLICKER
@@ -94,24 +100,26 @@ Gui, Add, Text, x30 y450 w700 vCurrentProfileKeySpam cFFAA00, Current Profile: N
 
 Gui, Tab, 2
 
-Gui, Add, GroupBox, x20 y175 w790 h150 cFFFFFF, AUTO CLICKER SETTINGS
+Gui, Add, GroupBox, x20 y185 w780 h140 cFFFFFF, AUTO CLICKER SETTINGS
 
-Gui, Add, Text, x30 y195 w200 cFFFFFF, Click Button:
-Gui, Add, DropDownList, x250 y190 w150 h30 vClickButtonDropdown, Left|Right|Middle
+Gui, Add, Text, x30 y205 w150 cFFFFFF, Click Button:
+Gui, Add, DropDownList, x190 y200 w100 h30 vClickButtonDropdown, Left|Right|Middle
 GuiControl, ChooseString, ClickButtonDropdown, Left
 
-Gui, Add, Text, x30 y240 w200 cFFFFFF, Click Delay (ms):
-Gui, Add, Edit, x250 y235 w150 h25 c000000 vClickerDelayInput, 50
+Gui, Add, Text, x30 y245 w150 cFFFFFF, Click Delay (ms):
+Gui, Add, Edit, x190 y240 w100 h25 c000000 vClickerDelayInput, 50
 
-Gui, Add, Button, x30 y275 w180 h30 gUpdateClickerSpeed cFFAA00, Update Speed
-Gui, Add, Text, x230 y280 w350 h20 vAutoClickerStatus cGreen, Status: STOPPED
+Gui, Add, Button, x30 y280 w160 h30 gUpdateClickerSpeed cFFAA00, Apply Speed
+Gui, Add, Text, x210 y285 w280 h20 vAutoClickerStatus cGreen, Status: STOPPED
 
-Gui, Add, GroupBox, x20 y355 w790 h125 cFFFFFF, INFO
+Gui, Add, GroupBox, x20 y340 w780 h130 cFFFFFF, SPEED PRESETS
 
-Gui, Add, Text, x30 y375 w700 cYellow, F5 = START | F6 = STOP
-Gui, Add, Text, x30 y400 w700 cYellow, Automatically click your mouse (Left, Right, or Middle)
-Gui, Add, Text, x30 y425 w700 cYellow, Great for clicking games, farming, or repetitive clicking
-Gui, Add, Text, x30 y450 w700 vCurrentProfileClicker cFFAA00, Current Profile: None
+Gui, Add, Button, x30 y360 w100 h30 gClickerSlow cGreen, SLOW (200ms)
+Gui, Add, Button, x145 y360 w100 h30 gClickerNormal cBlue, NORMAL (50ms)
+Gui, Add, Button, x260 y360 w100 h30 gClickerFast cRED, FAST (10ms)
+
+Gui, Add, Text, x30 y400 w420 cYellow, F5 = START | F6 = STOP
+Gui, Add, Text, x30 y425 w420 cYellow, Works with Left, Right, Middle buttons
 
 ; ============================================
 ; TAB 3: KEY SEQUENCE (1-5)
@@ -119,12 +127,13 @@ Gui, Add, Text, x30 y450 w700 vCurrentProfileClicker cFFAA00, Current Profile: N
 
 Gui, Tab, 3
 
-Gui, Add, Text, x20 y160 w790 h20 cFFAA00, KEY SEQUENCE - Steps 1 to 5 (Leave blank to skip)
-Gui, Add, GroupBox, x20 y185 w790 h280 cFFFFFF, SEQUENCE BUILDER
+Gui, Add, Text, x20 y160 w780 h20 cFFAA00, KEY SEQUENCE - Steps 1 to 5
+
+Gui, Add, GroupBox, x20 y185 w780 h270 cFFFFFF, SEQUENCE BUILDER
 
 Gui, Add, Text, x30 y205 w100 cFFFFFF, STEP
-Gui, Add, Text, x140 y205 w200 cFFFFFF, KEY
-Gui, Add, Text, x350 y205 w200 cFFFFFF, DELAY (ms)
+Gui, Add, Text, x140 y205 w150 cFFFFFF, KEY
+Gui, Add, Text, x300 y205 w150 cFFFFFF, DELAY (ms)
 
 Loop, 5
 {
@@ -132,12 +141,12 @@ Loop, 5
     yPos := 235 + (row - 1) * 40
     
     Gui, Add, Text, x30 y%yPos% w100 cFFFFFF, Step %row%:
-    Gui, Add, Edit, x140 y%yPos% w200 h25 c000000 vKeySeq%row%,
-    Gui, Add, Edit, x350 y%yPos% w100 h25 c000000 vDelaySeq%row%, 50
+    Gui, Add, Edit, x140 y%yPos% w150 h25 c000000 vKeySeq%row%,
+    Gui, Add, Edit, x300 y%yPos% w80 h25 c000000 vDelaySeq%row%, 50
 }
 
-Gui, Add, Button, x30 y525 w180 h30 gSetKeySequence cFFAA00, Save All Sequences
-Gui, Add, Text, x230 y530 w350 h20 cYellow, F9 = START | F10 = STOP
+Gui, Add, Button, x30 y520 w160 h30 gSetKeySequence cFFAA00, Save Sequence
+Gui, Add, Text, x210 y525 w300 h20 cYellow, F9 = START | F10 = STOP (PAUSE)
 
 ; ============================================
 ; TAB 4: KEY SEQUENCE (6-10)
@@ -145,12 +154,13 @@ Gui, Add, Text, x230 y530 w350 h20 cYellow, F9 = START | F10 = STOP
 
 Gui, Tab, 4
 
-Gui, Add, Text, x20 y160 w790 h20 cFFAA00, KEY SEQUENCE - Steps 6 to 10 (Leave blank to skip)
-Gui, Add, GroupBox, x20 y185 w790 h280 cFFFFFF, SEQUENCE BUILDER
+Gui, Add, Text, x20 y160 w780 h20 cFFAA00, KEY SEQUENCE - Steps 6 to 10
+
+Gui, Add, GroupBox, x20 y185 w780 h270 cFFFFFF, SEQUENCE BUILDER
 
 Gui, Add, Text, x30 y205 w100 cFFFFFF, STEP
-Gui, Add, Text, x140 y205 w200 cFFFFFF, KEY
-Gui, Add, Text, x350 y205 w200 cFFFFFF, DELAY (ms)
+Gui, Add, Text, x140 y205 w150 cFFFFFF, KEY
+Gui, Add, Text, x300 y205 w150 cFFFFFF, DELAY (ms)
 
 Loop, 5
 {
@@ -158,12 +168,12 @@ Loop, 5
     yPos := 235 + (A_Index - 1) * 40
     
     Gui, Add, Text, x30 y%yPos% w100 cFFFFFF, Step %row%:
-    Gui, Add, Edit, x140 y%yPos% w200 h25 c000000 vKeySeq%row%,
-    Gui, Add, Edit, x350 y%yPos% w100 h25 c000000 vDelaySeq%row%, 50
+    Gui, Add, Edit, x140 y%yPos% w150 h25 c000000 vKeySeq%row%,
+    Gui, Add, Edit, x300 y%yPos% w80 h25 c000000 vDelaySeq%row%, 50
 }
 
-Gui, Add, Button, x30 y525 w180 h30 gSetKeySequence cFFAA00, Save All Sequences
-Gui, Add, Text, x230 y530 w350 h20 cYellow, F9 = START | F10 = STOP
+Gui, Add, Button, x30 y520 w160 h30 gSetKeySequence cFFAA00, Save Sequence
+Gui, Add, Text, x210 y525 w300 h20 vLoopCounterDisplay cYellow, Loops: 0
 
 ; ============================================
 ; TAB 5: SETTINGS & INFO
@@ -171,30 +181,27 @@ Gui, Add, Text, x230 y530 w350 h20 cYellow, F9 = START | F10 = STOP
 
 Gui, Tab, 5
 
-Gui, Add, GroupBox, x20 y160 w790 h90 cFFFFFF, ALL HOTKEYS
+Gui, Add, GroupBox, x20 y160 w780 h100 cFFFFFF, ALL HOTKEYS
 
-Gui, Add, Text, x30 y180 w700 cYellow, KEY SPAM: F7 = Start | F8 = Stop
-Gui, Add, Text, x30 y205 w700 cYellow, AUTO CLICKER: F5 = Start | F6 = Stop
-Gui, Add, Text, x30 y230 w700 cYellow, KEY SEQUENCE: F9 = Start | F10 = Stop
+Gui, Add, Text, x30 y180 w350 cYellow, KEY SPAM: F7 = Start | F8 = Stop
+Gui, Add, Text, x30 y205 w350 cYellow, AUTO CLICKER: F5 = Start | F6 = Stop
+Gui, Add, Text, x30 y230 w350 cYellow, KEY SEQUENCE: F9 = Start | F10 = Pause
 
-Gui, Add, GroupBox, x20 y265 w790 h210 cFFFFFF, FEATURE INFORMATION
+Gui, Add, GroupBox, x20 y275 w780 h180 cFFFFFF, FEATURES
 
-Gui, Add, Text, x30 y285 w700 cFFFFFF, KEY SPAM
-Gui, Add, Text, x30 y305 w700 cYellow, Press two keys repeatedly with custom delays. Perfect for combo!
+Gui, Add, Text, x30 y295 w350 cFFFFFF, KEY SPAM
+Gui, Add, Text, x30 y315 w350 cYellow, Two keys + custom delays. Speed presets!
 
-Gui, Add, Text, x30 y335 w700 cFFFFFF, AUTO CLICKER
-Gui, Add, Text, x30 y355 w700 cYellow, Click your mouse repeatedly. Great for clicking games!
+Gui, Add, Text, x30 y350 w350 cFFFFFF, AUTO CLICKER
+Gui, Add, Text, x30 y370 w350 cYellow, Click any button. Speed presets included!
 
-Gui, Add, Text, x30 y385 w700 cFFFFFF, KEY SEQUENCE
-Gui, Add, Text, x30 y405 w700 cYellow, Chain up to 10 keys with delays. Jump + Move + Attack!
-
-Gui, Add, Text, x30 y435 w700 cFFFFFF, PROFILES
-Gui, Add, Text, x30 y455 w700 cYellow, Save settings and load them instantly!
+Gui, Add, Text, x30 y405 w350 cFFFFFF, KEY SEQUENCE
+Gui, Add, Text, x30 y425 w350 cYellow, Chain 10 keys. Pause/Resume support!
 
 ; ============================================
 ; SHOW GUI
 ; ============================================
-Gui, Show, w830 h630, Automation Tool
+Gui, Show, w820 h640, Automation Tool
 return
 
 ; ============================================
@@ -222,7 +229,7 @@ RefreshProfiles:
 {
     RefreshProfileList()
     ToolTip, Profiles refreshed!
-    SetTimer, RemoveToolTip, 2000
+    SetTimer, RemoveToolTip, 1500
 }
 return
 
@@ -239,8 +246,8 @@ CreateProfile:
     
     if (profileName = "")
     {
-        ToolTip, Enter a profile name!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Enter profile name!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
@@ -249,8 +256,8 @@ CreateProfile:
     
     if FileExist(profilePath)
     {
-        ToolTip, Profile already exists!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Profile exists!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
@@ -264,15 +271,15 @@ UpdateProfile:
     
     if (currentProfile = "")
     {
-        ToolTip, No profile loaded to update! Load one first or create new.
-        SetTimer, RemoveToolTip, 2500
+        ToolTip, Load a profile first!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
     profilePath := configFolder "\" currentProfile ".ini"
     SaveProfileData(profilePath, currentProfile)
-    ToolTip, Profile "%currentProfile%" updated!
-    SetTimer, RemoveToolTip, 2000
+    ToolTip, Updated!
+    SetTimer, RemoveToolTip, 1500
 }
 return
 
@@ -315,8 +322,8 @@ SaveProfileData(profilePath, profileName)
     currentProfile := profileName
     GuiControl, , NewProfileName,
     RefreshProfileList()
-    ToolTip, Profile "%profileName%" saved!
-    SetTimer, RemoveToolTip, 2000
+    ToolTip, Saved!
+    SetTimer, RemoveToolTip, 1500
     UpdateStatus()
 }
 
@@ -328,8 +335,8 @@ LoadProfile:
     
     if (selectedProfile = "")
     {
-        ToolTip, No profile selected!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Select profile!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
@@ -337,8 +344,8 @@ LoadProfile:
     
     if !FileExist(profilePath)
     {
-        ToolTip, Profile not found!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Not found!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
@@ -375,8 +382,8 @@ LoadProfile:
         keySeqDelays[A_Index] := seqDelay
     }
     
-    ToolTip, Profile loaded!
-    SetTimer, RemoveToolTip, 2000
+    ToolTip, Loaded!
+    SetTimer, RemoveToolTip, 1500
     UpdateStatus()
 }
 return
@@ -389,16 +396,16 @@ DeleteProfile:
     
     if (selectedProfile = "")
     {
-        ToolTip, No profile selected!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Select profile!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
     profilePath := configFolder "\" selectedProfile ".ini"
     FileDelete, %profilePath%
     RefreshProfileList()
-    ToolTip, Profile deleted!
-    SetTimer, RemoveToolTip, 2000
+    ToolTip, Deleted!
+    SetTimer, RemoveToolTip, 1500
 }
 return
 
@@ -413,6 +420,7 @@ F7::
     {
         keySpamRunning := true
         GuiControl, , KeySpamStatus, Status: RUNNING
+        GuiControl, , ActiveMacro, [ACTIVE] Key Spam Running
         
         Loop
         {
@@ -435,7 +443,7 @@ F8::
     global keySpamRunning
     keySpamRunning := false
     GuiControl, , KeySpamStatus, Status: STOPPED
-    UpdateStatus()
+    GuiControl, , ActiveMacro, [IDLE] No macro running
 }
 return
 
@@ -449,8 +457,8 @@ SetKeysAndDelays:
     
     if (inputValue1 = "")
     {
-        ToolTip, Key 1 cannot be empty!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Key 1 required!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
@@ -459,9 +467,44 @@ SetKeysAndDelays:
     keyDelay1 := delayValue1
     keyDelay2 := delayValue2
     
-    ToolTip, Key Spam updated!
-    SetTimer, RemoveToolTip, 2000
-    UpdateStatus()
+    ToolTip, Updated!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+KeySpamSlow:
+{
+    global keyDelay1, keyDelay2
+    keyDelay1 := 200
+    keyDelay2 := 200
+    GuiControl, , KeyDelay1Input, 200
+    GuiControl, , KeyDelay2Input, 200
+    ToolTip, SLOW preset set!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+KeySpamNormal:
+{
+    global keyDelay1, keyDelay2
+    keyDelay1 := 50
+    keyDelay2 := 50
+    GuiControl, , KeyDelay1Input, 50
+    GuiControl, , KeyDelay2Input, 50
+    ToolTip, NORMAL preset set!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+KeySpamFast:
+{
+    global keyDelay1, keyDelay2
+    keyDelay1 := 10
+    keyDelay2 := 10
+    GuiControl, , KeyDelay1Input, 10
+    GuiControl, , KeyDelay2Input, 10
+    ToolTip, FAST preset set!
+    SetTimer, RemoveToolTip, 1500
 }
 return
 
@@ -476,6 +519,7 @@ F5::
     {
         autoClickerRunning := true
         GuiControl, , AutoClickerStatus, Status: RUNNING
+        GuiControl, , ActiveMacro, [ACTIVE] Auto Clicker Running
         
         Loop
         {
@@ -493,7 +537,7 @@ F6::
     global autoClickerRunning
     autoClickerRunning := false
     GuiControl, , AutoClickerStatus, Status: STOPPED
-    UpdateStatus()
+    GuiControl, , ActiveMacro, [IDLE] No macro running
 }
 return
 
@@ -504,15 +548,44 @@ UpdateClickerSpeed:
     
     if (delayValue <= 0 || delayValue = "")
     {
-        ToolTip, Delay must be greater than 0!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Delay > 0!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
     clickerDelay := delayValue
-    ToolTip, Clicker speed updated!
-    SetTimer, RemoveToolTip, 2000
-    UpdateStatus()
+    ToolTip, Speed updated!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+ClickerSlow:
+{
+    global clickerDelay
+    clickerDelay := 200
+    GuiControl, , ClickerDelayInput, 200
+    ToolTip, SLOW preset set!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+ClickerNormal:
+{
+    global clickerDelay
+    clickerDelay := 50
+    GuiControl, , ClickerDelayInput, 50
+    ToolTip, NORMAL preset set!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+ClickerFast:
+{
+    global clickerDelay
+    clickerDelay := 10
+    GuiControl, , ClickerDelayInput, 10
+    ToolTip, FAST preset set!
+    SetTimer, RemoveToolTip, 1500
 }
 return
 
@@ -522,15 +595,28 @@ return
 
 F9::
 {
-    global keySequenceRunning, keySeqKeys, keySeqDelays
+    global keySequenceRunning, keySequencePaused, keySeqKeys, keySeqDelays, loopCount
+    
     if (!keySequenceRunning)
     {
         keySequenceRunning := true
+        keySequencePaused := false
+        loopCount := 0
+        GuiControl, , ActiveMacro, [ACTIVE] Key Sequence Running
         
         Loop
         {
             if (!keySequenceRunning)
                 break
+            
+            if (keySequencePaused)
+            {
+                Sleep, 100
+                continue
+            }
+            
+            loopCount++
+            GuiControl, , LoopCounterDisplay, Loops: %loopCount%
             
             Loop, 10
             {
@@ -548,14 +634,27 @@ F9::
             }
         }
     }
+    else if (keySequenceRunning && !keySequencePaused)
+    {
+        keySequencePaused := true
+        GuiControl, , ActiveMacro, [PAUSED] Key Sequence Paused
+    }
+    else if (keySequenceRunning && keySequencePaused)
+    {
+        keySequencePaused := false
+        GuiControl, , ActiveMacro, [ACTIVE] Key Sequence Running
+    }
 }
 return
 
 F10::
 {
-    global keySequenceRunning
+    global keySequenceRunning, keySequencePaused, loopCount
     keySequenceRunning := false
-    UpdateStatus()
+    keySequencePaused := false
+    loopCount := 0
+    GuiControl, , LoopCounterDisplay, Loops: 0
+    GuiControl, , ActiveMacro, [IDLE] No macro running
 }
 return
 
@@ -578,14 +677,13 @@ SetKeySequence:
     
     if (!hasKey)
     {
-        ToolTip, Add at least one key to the sequence!
-        SetTimer, RemoveToolTip, 2000
+        ToolTip, Add at least one key!
+        SetTimer, RemoveToolTip, 1500
         return
     }
     
     ToolTip, Sequence saved!
-    SetTimer, RemoveToolTip, 2000
-    UpdateStatus()
+    SetTimer, RemoveToolTip, 1500
 }
 return
 
@@ -595,11 +693,9 @@ return
 
 UpdateStatus()
 {
-    global keySpamRunning, autoClickerRunning, selectedKey1, selectedKey2, clickerButton, keyDelay1, keyDelay2, clickerDelay, currentProfile
-    
-    profileDisplay := currentProfile != "" ? "Current Profile: " currentProfile : "Current Profile: None"
-    GuiControl, , CurrentProfileKeySpam, %profileDisplay%
-    GuiControl, , CurrentProfileClicker, %profileDisplay%
+    global currentProfile
+    profileDisplay := currentProfile != "" ? currentProfile : "None"
+    ; Status updates handled by individual feature labels
 }
 
 GuiClose:
