@@ -5,6 +5,45 @@
 ; AUTOMATION TOOL - FEATURE-RICH VERSION
 ; ============================================
 
+; ============================================
+; THEME INITIALIZATION
+; ============================================
+darkModeEnabled := true
+configFile := A_AppData "\AutomationTool\config.ini"
+IniRead, darkModeEnabled, %configFile%, Theme, DarkMode, true
+
+; Define colors based on theme
+if (darkModeEnabled)
+{
+    ; DARK MODE COLORS
+    bgColor := "2d2d2d"
+    fgColor := "FFFFFF"
+    textColor := "cFFFFFF"
+    textSecondary := "cYellow"
+    buttonColor := "cFFAA00"
+    statusGreen := "cGreen"
+    statusLime := "cLime"
+    headerOrange := "cFFAA00"
+    accentPurple := "cPurple"
+    accentBlue := "cBlue"
+    accentRed := "cRED"
+}
+else
+{
+    ; LIGHT MODE COLORS (inverted)
+    bgColor := "FFFFFF"
+    fgColor := "000000"
+    textColor := "c000000"
+    textSecondary := "c333333"
+    buttonColor := "c0066FF"
+    statusGreen := "c00AA00"
+    statusLime := "c00DD00"
+    headerOrange := "cFF6600"
+    accentPurple := "c6600FF"
+    accentBlue := "c0000FF"
+    accentRed := "cFF0000"
+}
+
 keySpamRunning := false
 autoClickerRunning := false
 keySequenceRunning := false
@@ -37,13 +76,6 @@ comboRepeatCount := 1
 currentComboName := "Default"
 
 ; ============================================
-; WINDOW DETECTION VARIABLES
-; ============================================
-windowDetectionEnabled := false
-targetWindowTitle := ""
-windowCheckInterval := 500
-
-; ============================================
 ; MACRO SCHEDULER VARIABLES
 ; ============================================
 scheduledMacros := []
@@ -64,20 +96,20 @@ configFolder := A_AppData "\AutomationTool\Configs"
 if !FileExist(configFolder)
     FileCreateDir, %configFolder%
 
-Gui, Color, 2d2d2d
-Gui, Font, cFFFFFF s9, Segoe UI
+Gui, Color, %bgColor%
+Gui, Font, %textColor% s9, Segoe UI
 
 ; ============================================
 ; HEADER & PROFILES
 ; ============================================
 Gui, Add, Text, x10 y10 w800 h25 cFFAA00, AUTOMATION TOOL
-Gui, Add, Text, x10 y35 w800 h15 c999999, Speed Presets | Variable Delays | Combo Builder | Window Detection | Scheduler
+Gui, Add, Text, x10 y35 w800 h15 c999999, Speed Presets | Variable Delays | Combo Builder | Scheduler
 
 Gui, Add, Text, x10 y52 w400 h15 cGreen vActiveMacro, [IDLE] No macro running
 
-Gui, Add, GroupBox, x10 y70 w800 h75 cFFFFFF, PROFILES & CONFIGS
+Gui, Add, GroupBox, x10 y70 w800 h75 %textColor%, PROFILES & CONFIGS
 
-Gui, Add, Text, x20 y88 w130 cFFFFFF, Select Saved Config:
+Gui, Add, Text, x20 y88 w130 %textColor%, Select Saved Config:
 Gui, Add, DropDownList, x160 y83 w200 h30 vProfileList
 RefreshProfileList()
 
@@ -85,7 +117,7 @@ Gui, Add, Button, x375 y83 w55 h30 gLoadProfile cGreen, Load
 Gui, Add, Button, x440 y83 w55 h30 gDeleteProfile cRED, Delete
 Gui, Add, Button, x505 y83 w55 h30 gRefreshProfiles cBlue, Refresh
 
-Gui, Add, Text, x20 y120 w130 cFFFFFF, Create New Config:
+Gui, Add, Text, x20 y120 w130 %textColor%, Create New Config:
 Gui, Add, Edit, x160 y115 w200 h25 c000000 vNewProfileName,
 Gui, Add, Button, x375 y115 w85 h25 gCreateProfile cFFAA00, Save New
 Gui, Add, Button, x470 y115 w120 h25 gUpdateProfile cFFFF00, Update Current
@@ -93,30 +125,30 @@ Gui, Add, Button, x470 y115 w120 h25 gUpdateProfile cFFFF00, Update Current
 ; ============================================
 ; TABS
 ; ============================================
-Gui, Add, Tab3, x10 y155 w800 h470 vMainTab, Key Spam|Auto Clicker|Seq (1-5)|Seq (6-10)|Combo Builder|Window Detect|Scheduler|Advanced|Settings
+Gui, Add, Tab3, x10 y155 w800 h470 vMainTab, Key Spam|Auto Clicker|Seq (1-5)|Seq (6-10)|Combo Builder|Scheduler|Advanced|Settings|Preferences
 
 ; ============================================
 ; TAB 1: KEY SPAM
 ; ============================================
 
-Gui, Add, GroupBox, x20 y185 w780 h140 cFFFFFF, KEY SPAM SETTINGS
+Gui, Add, GroupBox, x20 y185 w780 h140 %textColor%, KEY SPAM SETTINGS
 
-Gui, Add, Text, x30 y205 w150 cFFFFFF, Key 1:
+Gui, Add, Text, x30 y205 w150 %textColor%, Key 1:
 Gui, Add, Edit, x190 y200 w100 h25 c000000 vKeyInput1, z
 
-Gui, Add, Text, x30 y240 w150 cFFFFFF, Key 2 (optional):
+Gui, Add, Text, x30 y240 w150 %textColor%, Key 2 (optional):
 Gui, Add, Edit, x190 y235 w100 h25 c000000 vKeyInput2,
 
-Gui, Add, Text, x320 y205 w150 cFFFFFF, Delay 1 (ms):
+Gui, Add, Text, x320 y205 w150 %textColor%, Delay 1 (ms):
 Gui, Add, Edit, x480 y200 w80 h25 c000000 vKeyDelay1Input, 50
 
-Gui, Add, Text, x320 y240 w150 cFFFFFF, Delay 2 (ms):
+Gui, Add, Text, x320 y240 w150 %textColor%, Delay 2 (ms):
 Gui, Add, Edit, x480 y235 w80 h25 c000000 vKeyDelay2Input, 50
 
 Gui, Add, Button, x30 y270 w160 h30 gSetKeysAndDelays cFFAA00, Set Keys & Delays
 Gui, Add, Text, x210 y275 w280 h20 vKeySpamStatus cGreen, Status: STOPPED
 
-Gui, Add, GroupBox, x20 y340 w780 h130 cFFFFFF, SPEED PRESETS
+Gui, Add, GroupBox, x20 y340 w780 h130 %textColor%, SPEED PRESETS
 
 Gui, Add, Button, x30 y360 w100 h30 gKeySpamSlow cGreen, SLOW (200ms)
 Gui, Add, Button, x145 y360 w100 h30 gKeySpamNormal cBlue, NORMAL (50ms)
@@ -126,31 +158,56 @@ Gui, Add, Text, x30 y400 w420 cYellow, F7 = START | F8 = STOP
 Gui, Add, Text, x30 y425 w420 cYellow, Perfect for combo inputs and rapid key presses
 
 ; ============================================
-; TAB 2: AUTO CLICKER
+; TAB 2: AUTO CLICKER (PROFESSIONAL UI)
 ; ============================================
 
 Gui, Tab, 2
 
-Gui, Add, GroupBox, x20 y185 w780 h140 cFFFFFF, AUTO CLICKER SETTINGS
+; ========== SIMPLE MODE ==========
+Gui, Add, GroupBox, x20 y160 w370 h230 %textColor%, SIMPLE - EASY TO USE
 
-Gui, Add, Text, x30 y205 w150 cFFFFFF, Click Button:
-Gui, Add, DropDownList, x190 y200 w100 h30 vClickButtonDropdown, Left|Right|Middle
+Gui, Add, Text, x30 y180 w100 %textColor%, Button:
+Gui, Add, DropDownList, x130 y175 w150 h30 vClickButtonDropdown, Left|Right|Middle
 GuiControl, ChooseString, ClickButtonDropdown, Left
 
-Gui, Add, Text, x30 y245 w150 cFFFFFF, Click Delay (ms):
-Gui, Add, Edit, x190 y240 w100 h25 c000000 vClickerDelayInput, 50
+Gui, Add, Text, x30 y225 w100 %textColor%, Speed:
+Gui, Add, DropDownList, x130 y220 w150 h30 vClickerSpeedDropdown, SLOW (2 CPS)|NORMAL (5 CPS)|FAST (10 CPS)|ULTRA (20 CPS)
+GuiControl, ChooseString, ClickerSpeedDropdown, NORMAL (5 CPS)
 
-Gui, Add, Button, x30 y280 w160 h30 gUpdateClickerSpeed cFFAA00, Apply Speed
-Gui, Add, Text, x210 y285 w280 h20 vAutoClickerStatus cGreen, Status: STOPPED
+Gui, Add, Text, x30 y270 w320 cYellow, Select button and speed, then press F5 to start
+Gui, Add, Text, x30 y290 w320 cYellow, Press F6 to stop clicking
 
-Gui, Add, GroupBox, x20 y340 w780 h130 cFFFFFF, SPEED PRESETS
+Gui, Add, Button, x30 y320 w150 h40 gStartClickerSimple cLime, START (F5)
+Gui, Add, Button, x200 y320 w150 h40 gStopClickerSimple cRED, STOP (F6)
 
-Gui, Add, Button, x30 y360 w100 h30 gClickerSlow cGreen, SLOW (200ms)
-Gui, Add, Button, x145 y360 w100 h30 gClickerNormal cBlue, NORMAL (50ms)
-Gui, Add, Button, x260 y360 w100 h30 gClickerFast cRED, FAST (10ms)
+Gui, Add, Text, x30 y365 w320 vAutoClickerStatus cGreen, Status: STOPPED
 
-Gui, Add, Text, x30 y400 w420 cYellow, F5 = START | F6 = STOP
-Gui, Add, Text, x30 y425 w420 cYellow, Works with Left, Right, Middle buttons
+; ========== ADVANCED MODE ==========
+Gui, Add, GroupBox, x420 y160 w380 h230 %textColor%, ADVANCED - FINE TUNING
+
+Gui, Add, Text, x430 y180 w100 %textColor%, CPS:
+Gui, Add, Edit, x530 y175 w80 h25 c000000 vClickerCPSInput, 5
+Gui, Add, Text, x625 y180 w100 cYellow, (clicks/second)
+
+Gui, Add, Text, x430 y220 w100 %textColor%, Hold (ms):
+Gui, Add, Edit, x530 y215 w80 h25 c000000 vClickerHoldInput, 10
+Gui, Add, Text, x625 y220 w100 cYellow, (button hold time)
+
+Gui, Add, Text, x430 y260 w100 %textColor%, Variation (ms):
+Gui, Add, Edit, x530 y255 w80 h25 c000000 vClickerVariationInput, 1
+Gui, Add, Text, x625 y260 w100 cYellow, (random timing)
+
+Gui, Add, Button, x430 y305 w340 h30 gApplyAdvancedClicker cFFAA00, Apply Advanced Settings
+
+Gui, Add, Text, x430 y360 w340 vAutoClickerStats cGreen, CPS: Calculating...
+
+; ========== QUICK PRESETS ==========
+Gui, Add, GroupBox, x20 y410 w780 h60 %textColor%, QUICK PRESETS
+
+Gui, Add, Button, x30 y425 w140 h30 gClickerSlow cGreen, SLOW (2 CPS)
+Gui, Add, Button, x185 y425 w140 h30 gClickerNormal cBlue, NORMAL (5 CPS)
+Gui, Add, Button, x340 y425 w140 h30 gClickerFast cFFAA00, FAST (10 CPS)
+Gui, Add, Button, x495 y425 w140 h30 gClickerSuper cLime, ULTRA (20 CPS)
 
 ; ============================================
 ; TAB 3: KEY SEQUENCE (1-5)
@@ -160,18 +217,18 @@ Gui, Tab, 3
 
 Gui, Add, Text, x20 y160 w780 h20 cFFAA00, KEY SEQUENCE - Steps 1 to 5
 
-Gui, Add, GroupBox, x20 y185 w780 h270 cFFFFFF, SEQUENCE BUILDER
+Gui, Add, GroupBox, x20 y185 w780 h270 %textColor%, SEQUENCE BUILDER
 
-Gui, Add, Text, x30 y205 w100 cFFFFFF, STEP
-Gui, Add, Text, x140 y205 w150 cFFFFFF, KEY
-Gui, Add, Text, x300 y205 w150 cFFFFFF, DELAY (ms)
+Gui, Add, Text, x30 y205 w100 %textColor%, STEP
+Gui, Add, Text, x140 y205 w150 %textColor%, KEY
+Gui, Add, Text, x300 y205 w150 %textColor%, DELAY (ms)
 
 Loop, 5
 {
     row := A_Index
     yPos := 235 + (row - 1) * 40
     
-    Gui, Add, Text, x30 y%yPos% w100 cFFFFFF, Step %row%:
+    Gui, Add, Text, x30 y%yPos% w100 %textColor%, Step %row%:
     Gui, Add, Edit, x140 y%yPos% w150 h25 c000000 vKeySeq%row%,
     Gui, Add, Edit, x300 y%yPos% w80 h25 c000000 vDelaySeq%row%, 50
 }
@@ -187,18 +244,18 @@ Gui, Tab, 4
 
 Gui, Add, Text, x20 y160 w780 h20 cFFAA00, KEY SEQUENCE - Steps 6 to 10
 
-Gui, Add, GroupBox, x20 y185 w780 h270 cFFFFFF, SEQUENCE BUILDER
+Gui, Add, GroupBox, x20 y185 w780 h270 %textColor%, SEQUENCE BUILDER
 
-Gui, Add, Text, x30 y205 w100 cFFFFFF, STEP
-Gui, Add, Text, x140 y205 w150 cFFFFFF, KEY
-Gui, Add, Text, x300 y205 w150 cFFFFFF, DELAY (ms)
+Gui, Add, Text, x30 y205 w100 %textColor%, STEP
+Gui, Add, Text, x140 y205 w150 %textColor%, KEY
+Gui, Add, Text, x300 y205 w150 %textColor%, DELAY (ms)
 
 Loop, 5
 {
     row := A_Index + 5
     yPos := 235 + (A_Index - 1) * 40
     
-    Gui, Add, Text, x30 y%yPos% w100 cFFFFFF, Step %row%:
+    Gui, Add, Text, x30 y%yPos% w100 %textColor%, Step %row%:
     Gui, Add, Edit, x140 y%yPos% w150 h25 c000000 vKeySeq%row%,
     Gui, Add, Edit, x300 y%yPos% w80 h25 c000000 vDelaySeq%row%, 50
 }
@@ -212,14 +269,14 @@ Gui, Add, Text, x210 y525 w300 h20 vLoopCounterDisplay cYellow, Loops: 0
 
 Gui, Tab, 5
 
-Gui, Add, GroupBox, x20 y160 w780 h170 cFFFFFF, COMBO BUILDER - CREATE CUSTOM ACTION CHAINS
+Gui, Add, GroupBox, x20 y160 w780 h170 %textColor%, COMBO BUILDER - CREATE CUSTOM ACTION CHAINS
 
-Gui, Add, Text, x30 y180 w100 cFFFFFF, Combo Name:
+Gui, Add, Text, x30 y180 w100 %textColor%, Combo Name:
 Gui, Add, Edit, x150 y175 w250 h25 c000000 vComboNameInput, My Combo
 
-Gui, Add, Text, x30 y215 w100 cFFFFFF, Action:
+Gui, Add, Text, x30 y215 w100 %textColor%, Action:
 Gui, Add, Edit, x150 y210 w150 h25 c000000 vComboActionInput, a
-Gui, Add, Text, x320 y215 w80 cFFFFFF, Repeat:
+Gui, Add, Text, x320 y215 w80 %textColor%, Repeat:
 Gui, Add, Edit, x420 y210 w80 h25 c000000 vComboRepeatInput, 1
 
 Gui, Add, Button, x30 y250 w110 h30 gAddComboAction cFFAA00, Add Action
@@ -228,7 +285,7 @@ Gui, Add, Button, x280 y250 w110 h30 gLoadCombo cBlue, Load
 Gui, Add, Button, x405 y250 w110 h30 gStartCombo cLime, Start (F11)
 Gui, Add, Button, x530 y250 w110 h30 gClearComboActions cRED, Clear
 
-Gui, Add, GroupBox, x20 y295 w780 h165 cFFFFFF, COMBO ACTIONS
+Gui, Add, GroupBox, x20 y295 w780 h165 %textColor%, COMBO ACTIONS
 
 Gui, Add, Text, x30 y315 w750 cYellow, No actions added yet. Click "Add Action" to start building!
 Gui, Add, Text, x30 y345 w750 cYellow, Example: Press 'a' 3 times, wait 100ms, press 'w' 2 times
@@ -237,60 +294,33 @@ Gui, Add, Text, x30 y370 w750 cYellow, This creates a custom macro sequence save
 Gui, Add, Text, x30 y410 w750 vComboStatus cGreen, Status: Ready
 
 ; ============================================
-; TAB 6: WINDOW DETECTION
+; ============================================
+; TAB 6: MACRO SCHEDULER
 ; ============================================
 
 Gui, Tab, 6
 
-Gui, Add, GroupBox, x20 y160 w780 h180 cFFFFFF, WINDOW DETECTION - AUTO-TARGET GAME WINDOWS
+Gui, Add, GroupBox, x20 y160 w780 h200 %textColor%, SCHEDULE MACROS - RUN AUTOMATICALLY AT SPECIFIC TIMES
 
-Gui, Add, Text, x30 y180 w150 cFFFFFF, Target Window:
-Gui, Add, Edit, x200 y175 w320 h25 c000000 vWindowTitleInput, (Click button to detect)
-
-Gui, Add, Button, x30 y215 w130 h30 gDetectWindow cFFAA00, Detect Window
-Gui, Add, Button, x175 y215 w130 h30 gAddToTargetWindow cGreen, Add Window
-
-Gui, Add, Text, x30 y260 w150 cFFFFFF, Check Interval (ms):
-Gui, Add, Edit, x200 y255 w80 h25 c000000 vWindowCheckInput, 500
-
-Gui, Add, Checkbox, x30 y295 w400 h20 vWindowDetectionCheck, Enable auto-focus when window is detected
-
-Gui, Add, GroupBox, x20 y330 w780 h130 cFFFFFF, INFORMATION
-
-Gui, Add, Text, x30 y350 w750 cYellow, How it works: Click "Detect Window" to find your target
-Gui, Add, Text, x30 y375 w750 cYellow, Enable "auto-focus" to only run macros when window is active
-Gui, Add, Text, x30 y400 w750 cYellow, Check interval: How often to verify window is still active
-
-Gui, Add, Button, x30 y430 w130 h30 gApplyWindowSettings cFFAA00, Apply
-Gui, Add, Button, x175 y430 w130 h30 gClearWindowTargets cRED, Clear Windows
-
-; ============================================
-; TAB 7: MACRO SCHEDULER
-; ============================================
-
-Gui, Tab, 7
-
-Gui, Add, GroupBox, x20 y160 w780 h200 cFFFFFF, SCHEDULE MACROS - RUN AUTOMATICALLY AT SPECIFIC TIMES
-
-Gui, Add, Text, x30 y185 w100 cFFFFFF, Macro 1 - Time:
+Gui, Add, Text, x30 y185 w100 %textColor%, Macro 1 - Time:
 Gui, Add, Edit, x140 y180 w70 h25 c000000 vScheduleTime1Input, 12:00
 
-Gui, Add, Text, x230 y185 w80 cFFFFFF, Action:
+Gui, Add, Text, x230 y185 w80 %textColor%, Action:
 Gui, Add, DropDownList, x330 y180 w130 h30 vScheduleMacro1Dropdown, Key Spam|Auto Clicker|Key Sequence|Combo
 
-Gui, Add, Text, x480 y185 w80 cFFFFFF, Repeat:
+Gui, Add, Text, x480 y185 w80 %textColor%, Repeat:
 Gui, Add, Edit, x580 y180 w70 h25 c000000 vScheduleRepeat1Input, 1
 
-Gui, Add, Text, x30 y225 w100 cFFFFFF, Macro 2 - Time:
+Gui, Add, Text, x30 y225 w100 %textColor%, Macro 2 - Time:
 Gui, Add, Edit, x140 y220 w70 h25 c000000 vScheduleTime2Input, 18:00
 
-Gui, Add, Text, x230 y225 w80 cFFFFFF, Action:
+Gui, Add, Text, x230 y225 w80 %textColor%, Action:
 Gui, Add, DropDownList, x330 y220 w130 h30 vScheduleMacro2Dropdown, Key Spam|Auto Clicker|Key Sequence|Combo
 
-Gui, Add, Text, x480 y225 w80 cFFFFFF, Repeat:
+Gui, Add, Text, x480 y225 w80 %textColor%, Repeat:
 Gui, Add, Edit, x580 y220 w70 h25 c000000 vScheduleRepeat2Input, 1
 
-Gui, Add, GroupBox, x20 y375 w780 h95 cFFFFFF, SCHEDULER CONTROLS
+Gui, Add, GroupBox, x20 y375 w780 h95 %textColor%, SCHEDULER CONTROLS
 
 Gui, Add, Checkbox, x30 y395 w400 h20 vSchedulerEnabledCheck, Enable Scheduler
 Gui, Add, Text, x30 y420 w750 cYellow, Time Format: HH:MM (24-hour) Example: 14:30 is 2:30 PM
@@ -301,46 +331,42 @@ Gui, Add, Button, x280 y445 w110 h30 gStopScheduler cRED, Stop
 Gui, Add, Button, x405 y445 w110 h30 gViewSchedulerLog cBlue, View Log
 
 ; ============================================
-; TAB 8: ADVANCED FEATURES
+; TAB 7: ADVANCED FEATURES
 ; ============================================
 
-Gui, Tab, 8
+Gui, Tab, 7
 
-Gui, Add, GroupBox, x20 y160 w780 h150 cFFFFFF, COMBO BUILDER
+Gui, Add, GroupBox, x20 y160 w780 h150 %textColor%, COMBO BUILDER
 
-Gui, Add, Text, x30 y180 w400 cFFFFFF, Build custom combo sequences:
+Gui, Add, Text, x30 y180 w400 %textColor%, Build custom combo sequences:
 Gui, Add, Text, x30 y205 w750 cYellow, Example: Press 'a' 3 times, then 'w' 2 times, then space 1 time!
 Gui, Add, Button, x30 y230 w160 h30 gOpenComboBuilder cFFAA00, Open Combo Builder
 Gui, Add, Text, x210 y235 w300 h20 cGreen, (Advanced sequencing - coming soon!)
 
-Gui, Add, GroupBox, x20 y325 w780 h150 cFFFFFF, WINDOW & MACRO TOOLS
+Gui, Add, GroupBox, x20 y325 w780 h150 %textColor%, MACRO TOOLS
 
-Gui, Add, Text, x30 y345 w400 cFFFFFF, Window Detection:
-Gui, Add, Button, x30 y365 w160 h30 gWindowDetect cFFAA00, Detect Window
-Gui, Add, Text, x210 y370 w400 cYellow, Auto-target specific game windows
-
-Gui, Add, Text, x30 y400 w400 cFFFFFF, Macro Scheduler:
-Gui, Add, Button, x30 y420 w160 h30 gOpenScheduler cFFAA00, Open Scheduler
-Gui, Add, Text, x210 y425 w400 cYellow, Schedule macros to run at specific times
+Gui, Add, Text, x30 y345 w400 %textColor%, Macro Scheduler:
+Gui, Add, Button, x30 y365 w160 h30 gOpenScheduler cFFAA00, Open Scheduler
+Gui, Add, Text, x210 y370 w400 cYellow, Schedule macros to run at specific times
 
 ; ============================================
-; TAB 9: SETTINGS & INFO
+; TAB 8: SETTINGS & INFO
 ; ============================================
 
-Gui, Tab, 9
+Gui, Tab, 8
 
-Gui, Add, GroupBox, x20 y160 w780 h100 cFFFFFF, ALL HOTKEYS
+Gui, Add, GroupBox, x20 y160 w780 h100 %textColor%, ALL HOTKEYS
 
 Gui, Add, Text, x30 y180 w350 cYellow, KEY SPAM: F7 = Start | F8 = Stop
 Gui, Add, Text, x30 y205 w350 cYellow, AUTO CLICKER: F5 = Start | F6 = Stop
 Gui, Add, Text, x30 y230 w350 cYellow, KEY SEQUENCE: F9 = Start | F10 = Pause
 
-Gui, Add, GroupBox, x20 y275 w780 h180 cFFFFFF, CORE FEATURES
+Gui, Add, GroupBox, x20 y275 w780 h180 %textColor%, CORE FEATURES
 
-Gui, Add, Text, x30 y295 w350 cFFFFFF, KEY SPAM | AUTO CLICKER | KEY SEQUENCE
+Gui, Add, Text, x30 y295 w350 %textColor%, KEY SPAM | AUTO CLICKER | KEY SEQUENCE
 Gui, Add, Text, x30 y320 w350 cYellow, Speed Presets + Variable Delays + Performance Stats + Profile System
 
-Gui, Add, GroupBox, x420 y275 w380 h180 cFFFFFF, FEATURES INFO
+Gui, Add, GroupBox, x420 y275 w380 h180 %textColor%, FEATURES INFO
 
 Gui, Add, Text, x430 y295 w350 cFFAA00, All Features Enabled:
 Gui, Add, Text, x430 y320 w350 cYellow, Speed Presets (SLOW/NORMAL/FAST)
@@ -349,11 +375,11 @@ Gui, Add, Text, x430 y360 w350 cYellow, Performance Monitoring (CPS, Actions, Ti
 Gui, Add, Text, x430 y380 w350 cYellow, Profile System (Save/Load/Update)
 Gui, Add, Button, x430 y410 w150 h25 gAboutTool cGreen, About Tool
 
-Gui, Add, GroupBox, x20 y465 w780 h130 cFFFFFF, ADVANCED FEATURES
+Gui, Add, GroupBox, x20 y465 w780 h130 %textColor%, ADVANCED FEATURES
 
 Gui, Add, Text, x30 y485 w350 cLime, [+] Combo Builder - Chain unlimited actions
-Gui, Add, Text, x30 y510 w350 cLime, [+] Window Detection - Target specific game windows
-Gui, Add, Text, x30 y535 w350 cLime, [+] Macro Scheduler - Schedule macros to run at specific times
+Gui, Add, Text, x30 y510 w350 cLime, [+] Macro Scheduler - Schedule macros to run at specific times
+Gui, Add, Text, x30 y535 w350 cLime, [+] Performance Monitoring - Real-time CPS tracking
 
 Gui, Add, Text, x420 y485 w350 cLime, [+] Variable Timing - Natural delay variations
 Gui, Add, Text, x420 y510 w350 cLime, [+] Keystroke History - Log all macro actions
@@ -363,6 +389,32 @@ Gui, Add, Button, x30 y580 w160 h25 gViewKeyHistory cBlue, View Keystroke Histor
 Gui, Add, Button, x210 y580 w160 h25 gViewResourceMonitor cPurple, Resource Monitor
 Gui, Add, Button, x390 y580 w160 h25 gClearLogs cRED, Clear All Logs
 Gui, Add, Button, x570 y580 w160 h25 gAboutTool cGreen, About This Tool
+
+; ============================================
+; TAB 9: PREFERENCES
+; ============================================
+
+Gui, Tab, 9
+
+Gui, Add, GroupBox, x20 y160 w780 h150 %textColor%, APPEARANCE
+
+Gui, Add, Checkbox, x30 y180 w400 h20 vDarkModeCheck, Dark Mode (Default)
+Gui, Add, Text, x30 y205 w750 cYellow, Dark mode is enabled by default. Uncheck to use Light Mode.
+Gui, Add, Text, x30 y225 w750 cYellow, Note: Restart the tool for theme changes to take effect.
+
+Gui, Add, Button, x30 y240 w150 h30 gApplyTheme cFFAA00, Apply Theme
+
+Gui, Add, GroupBox, x20 y330 w780 h150 %textColor%, CREDITS & ACKNOWLEDGMENTS
+
+Gui, Add, Text, x30 y350 w750 cFFAA00, Auto Clicker UI Inspired By:
+Gui, Add, Text, x30 y375 w750 cYellow, Blur Auto Clicker (https://github.com/Blur009/Blur-AutoClicker)
+Gui, Add, Text, x30 y395 w750 cYellow, Creator: Blur009 | License: GPL-3.0
+
+Gui, Add, Text, x30 y420 w750 cYellow, Special thanks to Blur009 for pioneering high-precision
+
+Gui, Add, Text, x30 y440 w750 cYellow, auto-clicking technology with variable duty cycles and
+
+Gui, Add, Text, x30 y460 w750 cYellow, advanced randomization features.
 
 ; ============================================
 ; SHOW GUI
@@ -611,7 +663,8 @@ F7::
             {
                 Random, variation, -%jitter%, %jitter%
                 delay1 := dly1 + variation
-                delay1 := delay1 > 0 ? delay1 : dly1
+                if (delay1 <= 0)
+                    delay1 := dly1
             }
             else
                 delay1 := dly1
@@ -628,7 +681,8 @@ F7::
                 {
                     Random, variation, -%jitter%, %jitter%
                     delay2 := dly2 + variation
-                    delay2 := delay2 > 0 ? delay2 : dly2
+                    if (delay2 <= 0)
+                        delay2 := dly2
                 }
                 else
                     delay2 := dly2
@@ -726,7 +780,7 @@ return
 
 F5::
 {
-    global autoClickerRunning, clickerButton, clickerDelay, actionCount, clickCount, startTime, antiDetectionEnabled, jitterAmount
+    global autoClickerRunning, clickerButton, clickerDelay, clickerCPS, clickerHold, clickerVariation, actionCount, clickCount, startTime
     if (!autoClickerRunning)
     {
         autoClickerRunning := true
@@ -734,43 +788,61 @@ F5::
         GuiControl, , ActiveMacro, [ACTIVE] Auto Clicker Running
         startTime := A_TickCount
         
-        ; Cache values for faster access
-        btnClick := clickerButton
-        baseDly := clickerDelay
-        antiDet := antiDetectionEnabled
-        jitter := jitterAmount
+        ; Get current settings
+        GuiControlGet, cps, , ClickerCPSInput
+        GuiControlGet, hold, , ClickerHoldInput
+        GuiControlGet, variation, , ClickerVariationInput
+        GuiControlGet, btnClick, , ClickButtonDropdown
+        
+        ; Convert CPS to delay (1000ms / CPS = delay between clicks)
+        if (cps <= 0)
+            cps := 1
+        baseDelay := 1000 / cps
+        
+        clickCount := 0
         statsCounter := 0
         
         Loop
         {
             if (!autoClickerRunning)
                 break
+            
+            ; Click with hold duration
             Click, %btnClick%
+            
+            if (hold > 0)
+                Sleep, %hold%
+            
             clickCount++
             actionCount++
             statsCounter++
             
-            ; Only update stats every 5 clicks (less GUI overhead)
-            if (statsCounter >= 5)
+            ; Calculate delay with variation
+            if (variation > 0)
             {
-                UpdateStats()
-                statsCounter := 0
-            }
-            
-            if (antiDet)
-            {
-                Random, variation, -%jitter%, %jitter%
-                dly := baseDly + variation
-                dly := dly > 0 ? dly : baseDly
+                Random, var, -%variation%, %variation%
+                dly := baseDelay + var
+                if (dly <= 0)
+                    dly := baseDelay
             }
             else
-                dly := baseDly
+                dly := baseDelay
+            
+            ; Only update stats every 5 clicks
+            if (statsCounter >= 5)
+            {
+                cpsActual := (clickCount * 1000) / (A_TickCount - startTime)
+                GuiControl, , AutoClickerStats, CPS: %cpsActual% (Target: %cps%)
+                statsCounter := 0
+            }
             
             Sleep, %dly%
         }
         
-        ; Final stats update
-        UpdateStats()
+        ; Final stats
+        elapsed := (A_TickCount - startTime) / 1000
+        cpsActual := clickCount / elapsed
+        GuiControl, , AutoClickerStats, CPS: %cpsActual% (Total: %clickCount% clicks)
     }
 }
 return
@@ -802,34 +874,112 @@ UpdateClickerSpeed:
 }
 return
 
-ClickerSlow:
+ClickerSuper:
 {
-    global clickerDelay
-    clickerDelay := 200
-    GuiControl, , ClickerDelayInput, 200
-    ToolTip, SLOW preset set!
-    SetTimer, RemoveToolTip, 1500
-}
-return
-
-ClickerNormal:
-{
-    global clickerDelay
-    clickerDelay := 50
-    GuiControl, , ClickerDelayInput, 50
-    ToolTip, NORMAL preset set!
+    GuiControl, , ClickerSpeedDropdown, ULTRA (20 CPS)
+    GuiControl, , ClickerCPSInput, 20
+    GuiControl, , ClickerHoldInput, 5
+    GuiControl, , ClickerVariationInput, 2
+    ToolTip, ULTRA FAST: 20 CPS!
     SetTimer, RemoveToolTip, 1500
 }
 return
 
 ClickerFast:
 {
-    global clickerDelay
-    clickerDelay := 10
-    GuiControl, , ClickerDelayInput, 10
-    ToolTip, FAST preset set!
+    GuiControl, , ClickerSpeedDropdown, FAST (10 CPS)
+    GuiControl, , ClickerCPSInput, 10
+    GuiControl, , ClickerHoldInput, 10
+    GuiControl, , ClickerVariationInput, 1
+    ToolTip, FAST: 10 CPS!
     SetTimer, RemoveToolTip, 1500
 }
+return
+
+ClickerNormal:
+{
+    GuiControl, , ClickerSpeedDropdown, NORMAL (5 CPS)
+    GuiControl, , ClickerCPSInput, 5
+    GuiControl, , ClickerHoldInput, 15
+    GuiControl, , ClickerVariationInput, 0
+    ToolTip, NORMAL: 5 CPS!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+ClickerSlow:
+{
+    GuiControl, , ClickerSpeedDropdown, SLOW (2 CPS)
+    GuiControl, , ClickerCPSInput, 2
+    GuiControl, , ClickerHoldInput, 20
+    GuiControl, , ClickerVariationInput, 0
+    ToolTip, SLOW: 2 CPS!
+    SetTimer, RemoveToolTip, 1500
+}
+return
+
+StartClickerSimple:
+{
+    GuiControlGet, speed, , ClickerSpeedDropdown
+    
+    ; Parse speed from dropdown
+    if (InStr(speed, "2 CPS"))
+        cps := 2
+    else if (InStr(speed, "5 CPS"))
+        cps := 5
+    else if (InStr(speed, "10 CPS"))
+        cps := 10
+    else if (InStr(speed, "20 CPS"))
+        cps := 20
+    else
+        cps := 5
+    
+    ; Update advanced inputs
+    GuiControl, , ClickerCPSInput, %cps%
+    GuiControl, , ClickerHoldInput, 15
+    GuiControl, , ClickerVariationInput, 1
+    
+    ; Start clicking
+    Send, {F5}
+}
+return
+
+StopClickerSimple:
+{
+    Send, {F6}
+}
+return
+
+ApplyAdvancedClicker:
+GuiControlGet, cps, , ClickerCPSInput
+GuiControlGet, hold, , ClickerHoldInput
+GuiControlGet, variation, , ClickerVariationInput
+if (cps <= 0)
+{
+    ToolTip, CPS must be greater than 0!
+    SetTimer, RemoveToolTip, 1500
+    return
+}
+ToolTip, Advanced settings applied!
+SetTimer, RemoveToolTip, 2000
+return
+
+ApplyTheme:
+GuiControlGet, darkMode, , DarkModeCheck
+configFile := A_AppData "\AutomationTool\config.ini"
+configFolder := A_AppData "\AutomationTool"
+if (!FileExist(configFolder))
+    FileCreateDir, %configFolder%
+IniWrite, %darkMode%, %configFile%, Theme, DarkMode
+if (darkMode)
+{
+    ToolTip, Dark Mode will be active on restart!
+}
+else
+{
+    ToolTip, Light Mode will be active on restart!
+}
+SetTimer, RemoveToolTip, 2000
 return
 
 ; ============================================
@@ -890,7 +1040,8 @@ F9::
                     {
                         Random, variation, -%jitter%, %jitter%
                         finalDelay := delay + variation
-                        finalDelay := finalDelay > 0 ? finalDelay : delay
+                        if (finalDelay <= 0)
+                            finalDelay := delay
                     }
                     else
                         finalDelay := delay
@@ -963,7 +1114,10 @@ return
 UpdateStatus()
 {
     global currentProfile
-    profileDisplay := currentProfile != "" ? currentProfile : "None"
+    if (currentProfile != "")
+        profileDisplay := currentProfile
+    else
+        profileDisplay := "None"
     ; Status updates handled by individual feature labels
 }
 
@@ -997,7 +1151,10 @@ ApplyJitter(baseDelay)
     
     Random, variation, -%jitterAmount%, %jitterAmount%
     newDelay := baseDelay + variation
-    return newDelay > 0 ? newDelay : baseDelay
+    if (newDelay > 0)
+        return newDelay
+    else
+        return baseDelay
 }
 
 UpdateStats()
@@ -1014,7 +1171,10 @@ UpdateStats()
     lastUpdate := currentTime
     
     elapsedSeconds := Round((currentTime - startTime) / 1000)
-    cps := elapsedSeconds > 0 ? Round(clickCount / elapsedSeconds, 1) : 0
+    if (elapsedSeconds > 0)
+        cps := Round(clickCount / elapsedSeconds, 1)
+    else
+        cps := 0
     
     statText := "CPS: " cps " | Actions: " actionCount " | Time: " elapsedSeconds "s"
     GuiControl, , PerfStats, %statText%
@@ -1105,7 +1265,6 @@ AboutTool:
     [+] Auto Clicker (click automatically)
     [+] Key Sequences (chain up to 10 keys)
     [+] Combo Builder (create custom sequences)
-    [+] Window Detection (target specific windows)
     [+] Macro Scheduler (schedule runs at times)
     [+] Speed Presets (SLOW/NORMAL/FAST)
     [+] Performance Monitoring (CPS, Actions, Time)
@@ -1118,6 +1277,12 @@ AboutTool:
     - Productivity automation
     - Testing and QA
     - Accessibility needs
+    
+    SPECIAL THANKS:
+    Auto Clicker UI inspired by Blur009's
+    Blur Auto Clicker project (GPL-3.0).
+    
+    See Preferences tab for full credits.
     
     Simple. Reliable. Efficient.
     )
@@ -1136,7 +1301,10 @@ GetRandomizedDelay(baseDelay, variance)
     
     Random, variation, -%variance%, %variance%
     newDelay := baseDelay + variation
-    return newDelay > 0 ? newDelay : baseDelay
+    if (newDelay > 0)
+        return newDelay
+    else
+        return baseDelay
 }
 
 ; ============================================
@@ -1288,61 +1456,6 @@ ClearComboActions:
 return
 
 ; ============================================
-; WINDOW DETECTION FUNCTIONS
-; ============================================
-
-DetectWindow:
-{
-    ToolTip, Click on target window...
-    Sleep, 500
-    WinGetActiveTitle, activeWindow
-    GuiControl, , WindowTitleInput, %activeWindow%
-    ToolTip, Detected: %activeWindow%
-    SetTimer, RemoveToolTip, 2000
-}
-return
-
-AddToTargetWindow:
-{
-    GuiControlGet, currentWindow, , WindowTitleInput
-    
-    if (currentWindow = "" || currentWindow = "(Click button to detect)")
-    {
-        ToolTip, Detect a window first!
-        SetTimer, RemoveToolTip, 1500
-        return
-    }
-    
-    windowFile := A_AppData "\AutomationTool\target_windows.txt"
-    FileAppend, %currentWindow%`n, %windowFile%
-    
-    ToolTip, Window added to targets!
-    SetTimer, RemoveToolTip, 1500
-}
-return
-
-ApplyWindowSettings:
-{
-    global windowDetectionEnabled, windowCheckInterval
-    GuiControlGet, windowDetectionEnabled, , WindowDetectionCheck
-    GuiControlGet, checkInterval, , WindowCheckInput
-    windowCheckInterval := checkInterval
-    
-    ToolTip, Window detection settings applied!
-    SetTimer, RemoveToolTip, 1500
-}
-return
-
-ClearWindowTargets:
-{
-    windowFile := A_AppData "\AutomationTool\target_windows.txt"
-    FileDelete, %windowFile%
-    GuiControl, , WindowDetectedList, All window targets cleared!
-    ToolTip, Windows cleared!
-    SetTimer, RemoveToolTip, 1500
-}
-return
-
 ; ============================================
 ; MACRO SCHEDULER FUNCTIONS
 ; ============================================
