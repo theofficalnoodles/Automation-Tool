@@ -84,15 +84,13 @@ Use key spam for games that need keyboard input, and auto clicker for games that
 ## Advanced Questions
 
 ### Q: Can I save my settings?
-**A:** Not yet! This is planned for v1.1. For now, you can:
-- Edit the script with a text editor and change default values
-- Write down your settings and manually enter them each time
+**A:** Yes! This is a most.
 
 ### Q: Can I make key sequences (like hold Z then press X)?
-**A:** Not with the current version. This is planned for a future update.
+**A:** Yes! This was added later in a newer version.
 
 ### Q: Can I record and replay mouse movements?
-**A:** Not yet! This is a planned feature for v2.0.
+**A:** Not yet! This is planned for V8.0.0
 
 ### Q: How do I edit the script?
 **A:** 
