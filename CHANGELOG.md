@@ -1,18 +1,19 @@
 # Changelog
 
 All notable changes to the Game Automation Tool will be documented in this file.
+KEEP IN MIND THIS INFORMATION IS OUTDATED. NEW UPDATES ARE STILL RELEASING.
 
 ## [1.0.0] - 2025-01-15
 
 ### Added
-- ✨ **Auto Clicker** - Click any mouse button automatically
-- ⌨️ **Key Spam** - Repeatedly press any key
-- 🎨 **Modern GUI** - Dark theme with color-coded status
-- 🔧 **Custom Hotkeys** - Fully customizable start/stop keys
-- ⚡ **Adjustable Speeds** - Control click/key timing in milliseconds
-- 🔄 **Independent Controls** - Run both features simultaneously
-- 📊 **Real-time Status Display** - See what's running at all times
-- 💾 **Lightweight** - Single executable file, no dependencies
+-  **Auto Clicker** - Click any mouse button automatically
+-  **Key Spam** - Repeatedly press any key
+-  **Modern GUI** - Dark theme with color-coded status
+-  **Custom Hotkeys** - Fully customizable start/stop keys
+-  **Adjustable Speeds** - Control click/key timing in milliseconds
+-  **Independent Controls** - Run both features simultaneously
+-  **Real-time Status Display** - See what's running at all times
+-  **Lightweight** - Single executable file, no dependencies
 
 ### Features
 - Support for all mouse buttons (Left, Right, Middle)
@@ -23,6 +24,8 @@ All notable changes to the Game Automation Tool will be documented in this file.
 - Clear status updates
 - Universal: Works with games, apps, productivity tools, etc.
 
+---
+
 ### Documentation
 - Complete README with examples
 - Contributing guidelines
@@ -32,35 +35,7 @@ All notable changes to the Game Automation Tool will be documented in this file.
 
 ---
 
-## Future Roadmap 🗓️
-
-### [1.1.0] - Planned
-- [ ] Save/Load macro profiles
-- [ ] Multiple key sequences
-- [ ] Click at specific coordinates
-- [ ] Sound notifications
-- [ ] Hotkey history/logs
-- [ ] Pause function (separate from stop)
-- [ ] Custom color themes
-
-### [1.2.0] - Planned
-- [ ] Macro recording
-- [ ] Scheduled macros (run at specific times)
-- [ ] Mouse movement recording and playback
-- [ ] Collision detection
-- [ ] Multi-click patterns
-- [ ] Advanced hotkey combos (Ctrl+Alt+Shift combinations)
-
-### [2.0.0] - Planned
-- [ ] Web UI version
-- [ ] Cloud profile sync
-- [ ] Community macro library
-- [ ] Android/iOS companion app
-- [ ] Game-specific profiles/templates
-
----
-
-## Known Issues 🐛
+## Known Issues 
 
 - Some applications may intercept hotkeys (especially fullscreen)
   - **Workaround:** Try different function keys (F1-F12)
@@ -96,9 +71,9 @@ No need to uninstall - just run the new script!
 
 Have an issue or feature request? Open an issue on GitHub!
 
-- 🐛 Report bugs: https://github.com/yourusername/game-automation-tool/issues
-- 💡 Request features: https://github.com/yourusername/game-automation-tool/issues
-- 📖 See documentation: Check README.md
+- Report bugs: https://github.com/theofficalnoodles/Automation-Tool/issues
+- Request features: https://github.com/theofficalnoodles/Automation-Tool/issues
+- See documentation: Check README.md
 
 ---
 
