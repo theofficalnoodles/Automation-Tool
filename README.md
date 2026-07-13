@@ -2,16 +2,16 @@
 
 A powerful, universal automation tool for **any task**. Includes **auto clicker** and **key spam** functionality with an easy-to-use UI. Perfect for games, apps, workflows, and more!
 
-## Features ✨
+## Features
 
-- **🖱️ Auto Clicker** - Click any mouse button automatically (Left, Right, Middle)
-- **⌨️ Key Spam** - Repeatedly press any key
-- **⚡ Adjustable Speed** - Control click/key speed in milliseconds
-- **🔧 Custom Hotkeys** - Set your own hotkeys for start/stop
-- **🎨 Modern UI** - Clean, user-friendly interface
-- **⚙️ Real-time Status** - See what's running at a glance
-- **🔄 Multi-feature** - Run clicker and key spam independently
-- **💾 Lightweight** - Small file size, runs fast
+- ** Auto Clicker** - Click any mouse button automatically (Left, Right, Middle)
+- ** Key Spam** - Repeatedly press any key
+- ** Adjustable Speed** - Control click/key speed in milliseconds
+- ** Custom Hotkeys** - Set your own hotkeys for start/stop
+- ** Modern UI** - Clean, user-friendly interface
+- ** Real-time Status** - See what's running at a glance
+- ** Multi-feature** - Run clicker and key spam independently
+- ** Lightweight** - Small file size, runs fast
 
 ## System Requirements
 
@@ -72,17 +72,17 @@ A powerful, universal automation tool for **any task**. Includes **auto clicker*
 
 ## Examples
 
-### Gaming 🎮
+### Gaming
 - **Clicker Game:** Left click at 30ms, let it run
 - **Idle Game:** Key spam (z key) at 150ms
 - **Fast-Paced:** Auto clicker 50ms + key spam simultaneously
 
-### Productivity 📊
+### Productivity
 - **Repetitive Forms:** Spam spacebar to fill forms quickly
 - **Data Entry:** Auto-click and tab through fields
 - **Testing:** Automate UI testing workflows
 
-### Other Uses 💡
+### Other Uses
 - **Art/Design:** Rapidly apply effects or transformations
 - **Video Editing:** Timeline automation
 - **Presentations:** Auto-advance slides
@@ -143,9 +143,9 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Support
 
-- 💬 Open an issue on GitHub
-- 📖 Check the troubleshooting section above
-- 🐛 Report bugs with details and screenshots
+- Open an issue on GitHub
+- Check the troubleshooting section above
+- Report bugs with details and screenshots
 
 ---
 
