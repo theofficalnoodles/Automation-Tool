@@ -6,12 +6,12 @@ A powerful, universal automation tool for **any task**. Includes **auto clicker*
 
 - **Auto Clicker** - Click any mouse button automatically (Left, Right, Middle)
 - **Key Spam** - Repeatedly press any key
-- ** Adjustable Speed** - Control click/key speed in milliseconds
-- ** Custom Hotkeys** - Set your own hotkeys for start/stop
-- ** Modern UI** - Clean, user-friendly interface
-- ** Real-time Status** - See what's running at a glance
-- ** Multi-feature** - Run clicker and key spam independently
-- ** Lightweight** - Small file size, runs fast
+- **Adjustable Speed** - Control click/key speed in milliseconds
+- **Custom Hotkeys** - Set your own hotkeys for start/stop
+- **Modern UI** - Clean, user-friendly interface
+- **Real-time Status** - See what's running at a glance
+- **Multi-feature** - Run clicker and key spam independently
+- **Lightweight** - Small file size, runs fast
 
 ## System Requirements
 
