@@ -4,7 +4,7 @@ We love your input! We want to make contributing to this project as easy and tra
 
 ## How to Contribute
 
-### Report Bugs 🐛
+### Report Bugs
 - Use the GitHub Issues tab
 - Include a clear title and description
 - Provide screenshots or error messages
@@ -23,7 +23,7 @@ Environment: Windows 10, AutoHotkey v1.1.35
 Application: XYZ App (fullscreen)
 ```
 
-### Suggest Features 💡
+### Suggest Features
 - Open an Issue with the label "enhancement"
 - Describe the use case
 - Explain why this feature would be useful
@@ -36,7 +36,7 @@ This would let users save their favorite settings for different games
 and quickly switch between them.
 ```
 
-### Submit Code Changes 🔧
+### Submit Code Changes
 
 1. **Fork the repository**
    - Click "Fork" in the top right
@@ -124,4 +124,4 @@ Feel free to open an issue or discussion. Don't be shy!
 
 ---
 
-**Thank you for helping make this project better!** 🎉
+**Thank you for helping make this project better!**
