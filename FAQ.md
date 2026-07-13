@@ -149,10 +149,8 @@ This is useful for sharing without requiring AutoHotkey installation.
 
 ## Still Have Questions?
 
--  **Open an Issue:** https://github.com/theofficalnoodles/game-automation-tool/issues
+-  **Open an Issue:** https://github.com/theofficalnoodles/automation-tool/issues
 -  **Read the README:** Check README.md for more details
 -  **Check the Code:** The script is well-commented and easy to read
 
 ---
-
-**Last Updated:** January 2025
