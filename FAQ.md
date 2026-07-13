@@ -149,7 +149,7 @@ This is useful for sharing without requiring AutoHotkey installation.
 
 ## Still Have Questions?
 
--  **Open an Issue:** https://github.com/theofficalnoodles/automation-tool/issues
+-  **Open an Issue:** https://github.com/theofficalnoodles/Automation-Tool/issues
 -  **Read the README:** Check README.md for more details
 -  **Check the Code:** The script is well-commented and easy to read
 
