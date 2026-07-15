@@ -60,7 +60,7 @@ KEEP IN MIND THIS INFORMATION IS OUTDATED. NEW UPDATES ARE STILL RELEASING.
 ## How to Update
 
 1. Download the latest version from the releases page
-2. Replace your old `GameAutomationTool.ahk` file
+2. Replace your old `AutomationTool.ahk` file
 3. Run the new version
 
 No need to uninstall - just run the new script!
